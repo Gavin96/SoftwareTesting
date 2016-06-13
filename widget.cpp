@@ -6,7 +6,7 @@ Widget::Widget(QWidget *parent) :
     ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    ui->label->setText("<a href=\"http://www.yafeilinux.com\"> www.yafeilinux.com </a>");
+    ui->label->setText(" SoftwareTesting 2016 ");
     this->resize(850,550);
     ui->textEdit->setFocusPolicy(Qt::StrongFocus);
     ui->textBrowser->setFocusPolicy(Qt::NoFocus);
@@ -121,8 +121,8 @@ void Widget::newParticipant(QString userName,QString localHostName,QString ipAdd
         //设置显示窗口--更新
         ui->textBrowser->setTextColor(Qt::gray);
         ui->textBrowser->setCurrentFont(QFont("Times New Roman",10));
-        ui->textBrowser->append(tr("%1 在线！").arg(userName));
-        ui->onlineUser->setText(tr("在线人数：%1").arg(ui->tableWidget->rowCount()));
+        ui->textBrowser->append(tr("%1 is online!").arg(userName));
+        ui->onlineUser->setText(tr("  OnlineUsers:%1").arg(ui->tableWidget->rowCount()));
         sendMessage(NewParticipant);//发送新用户加入消息
     }
 }
@@ -136,8 +136,8 @@ void Widget::participantLeft(QString userName,QString localHostName,QString time
     //更新显示窗口
     ui->textBrowser->setTextColor(Qt::gray);
     ui->textBrowser->setCurrentFont(QFont("Times New Roman",10));
-    ui->textBrowser->append(tr("%1 于 %2 离开！").arg(userName).arg(time));
-    ui->onlineUser->setText(tr("在线人数：%1").arg(ui->tableWidget->rowCount()));
+    ui->textBrowser->append(tr("%1 quit at %2 !").arg(userName).arg(time));
+    ui->onlineUser->setText(tr("  OnlineUsers:%1").arg(ui->tableWidget->rowCount()));
 }
 
 Widget::~Widget()
@@ -193,7 +193,7 @@ void Widget::sendMessage(MessageType type, QString serverAddress)  //发送信�
             {
                 if(ui->textEdit->toPlainText() == "")
                 {
-                    QMessageBox::warning(0,tr("警告"),tr("发送内容不能为空"),QMessageBox::Ok);
+                    QMessageBox::warning(0,tr("Warning"),tr("Content sends can't be null!!"),QMessageBox::Ok);
                     return;
                 }
                out << address << getMessage();
@@ -269,13 +269,13 @@ void Widget::hasPendingFile(QString userName,QString serverAddress,  //接收文
     QString ipAddress = getIP();
     if(ipAddress == clientAddress)
     {
-        int btn = QMessageBox::information(this,tr("接受文件"),
-                                 tr("来自%1(%2)的文件：%3,是否接收？")
+        int btn = QMessageBox::information(this,tr("Recieve file"),
+                                 tr("from%1(%2) de file：%3,recieve or not?")
                                  .arg(userName).arg(serverAddress).arg(fileName),
                                  QMessageBox::Yes,QMessageBox::No);
         if(btn == QMessageBox::Yes)
         {
-            QString name = QFileDialog::getSaveFileName(0,tr("保存文件"),fileName);
+            QString name = QFileDialog::getSaveFileName(0,tr("save file"),fileName);
             if(!name.isEmpty())
             {
                 //建立Tcp连接传输文件
@@ -301,7 +301,7 @@ void Widget::on_sendfile_clicked()
 {
     if(ui->tableWidget->selectedItems().isEmpty())
     {
-        QMessageBox::warning(0,tr("选择用户"),tr("请先从用户列表选择要传送的用户！"),QMessageBox::Ok);
+        QMessageBox::warning(0,tr("Choose user"),tr("Please choose from the userlist first!"),QMessageBox::Ok);
         return;
     }
     server->show();
@@ -377,11 +377,11 @@ void Widget::on_textcolor_clicked()//字体颜色设置
 void Widget::on_save_clicked()//保存聊天记录
 {
     if(ui->textBrowser->document()->isEmpty())
-        QMessageBox::warning(0,tr("警告"),tr("聊天记录为空，无法保存！"),QMessageBox::Ok);
+        QMessageBox::warning(0,tr("Warning"),tr("Chat record is null to save!"),QMessageBox::Ok);
     else
     {
        //获得文件名
-       QString fileName = QFileDialog::getSaveFileName(this,tr("保存聊天记录"),tr("聊天记录"),tr("文本(*.txt);;All File(*.*)"));
+       QString fileName = QFileDialog::getSaveFileName(this,tr("save the chat record"),tr("chat record"),tr("text(*.txt);;All File(*.*)"));
        if(!fileName.isEmpty())
            saveFile(fileName);
     }
@@ -393,8 +393,8 @@ bool Widget::saveFile(const QString &fileName)//保存文件
     if(!file.open(QFile::WriteOnly | QFile::Text))
 
     {
-        QMessageBox::warning(this,tr("保存文件"),
-        tr("无法保存文件 %1:\n %2").arg(fileName)
+        QMessageBox::warning(this,tr("save file"),
+        tr("can not save file %1:\n %2").arg(fileName)
         .arg(file.errorString()));
         return false;
     }

@@ -13,15 +13,18 @@ TEMPLATE = app
 SOURCES += main.cpp\
         widget.cpp \
     tcpclient.cpp \
-    tcpserver.cpp
+    tcpserver.cpp \
+    chat.cpp
 
 HEADERS  += widget.h \
     tcpclient.h \
-    tcpserver.h
+    tcpserver.h \
+    chat.h
 
 FORMS    += widget.ui \
     tcpclient.ui \
-    tcpserver.ui
+    tcpserver.ui \
+    chat.ui
 QT += network
 
 RESOURCES += \

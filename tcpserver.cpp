@@ -43,11 +43,11 @@ void TcpServer::sendMessage()  //开始发送数据
     clientConnection = tcpServer->nextPendingConnection();
     connect(clientConnection,SIGNAL(bytesWritten(qint64)),SLOT(updateClientProgress(qint64)));
 
-    ui->serverStatusLabel->setText(tr("开始传送文件 %1 ！").arg(theFileName));
+    ui->serverStatusLabel->setText(tr("Begin to transfer file %1 ！").arg(theFileName));
 
     localFile = new QFile(fileName);
     if(!localFile->open((QFile::ReadOnly))){//以只读方式打开
-        QMessageBox::warning(this,tr("应用程序"),tr("无法读取文件 %1:\n%2").arg(fileName).arg(localFile->errorString()));
+        QMessageBox::warning(this,tr("Application"),tr("can't read file %1:\n%2").arg(fileName).arg(localFile->errorString()));
         return;
     }
     TotalBytes = localFile->size();
@@ -80,7 +80,7 @@ void TcpServer::updateClientProgress(qint64 numBytes)//更新进度条
 
    float useTime = time.elapsed();
    double speed = bytesWritten / useTime;
-   ui->serverStatusLabel->setText(tr("已发送 %1MB (%2MB/s) \n共%3MB 已用时:%4秒\n估计剩余时间：%5秒")
+   ui->serverStatusLabel->setText(tr("Received %1MB (%2MB/s) \nTotal%3MB Time costed:%4s\nMore time needed：%5s")
                                   .arg(bytesWritten / (1024*1024))//已发送
                                   .arg(speed*1000/(1024*1024),0,'f',2)//速度
                                   .arg(TotalBytes / (1024 * 1024))//总大小
@@ -89,7 +89,7 @@ void TcpServer::updateClientProgress(qint64 numBytes)//更新进度条
 
    //num.sprintf("%.1f KB/s", (bytesWritten*1000) / (1024.0*time.elapsed()));
     if(bytesWritten == TotalBytes)
-        ui->serverStatusLabel->setText(tr("传送文件 %1 成功").arg(theFileName));
+        ui->serverStatusLabel->setText(tr("File %1 transfered over").arg(theFileName));
 
 }
 
@@ -99,7 +99,7 @@ void TcpServer::on_serverOpenBtn_clicked()  //打开
     if(!fileName.isEmpty())
     {
         theFileName = fileName.right(fileName.size() - fileName.lastIndexOf('/')-1);
-        ui->serverStatusLabel->setText(tr("要传送的文件为：%1 ").arg(theFileName));
+        ui->serverStatusLabel->setText(tr("Transfered file：%1 ").arg(theFileName));
         ui->serverSendBtn->setEnabled(true);
         ui->serverOpenBtn->setEnabled(false);
     }
@@ -108,7 +108,7 @@ void TcpServer::on_serverOpenBtn_clicked()  //打开
 void TcpServer::refused()   //被对方拒绝
 {
     tcpServer->close();
-    ui->serverStatusLabel->setText(tr("对方拒绝接收！！！"));
+    ui->serverStatusLabel->setText(tr("File is rejected!!!"));
 }
 
 void TcpServer::on_serverSendBtn_clicked()  //发送
@@ -120,7 +120,7 @@ void TcpServer::on_serverSendBtn_clicked()  //发送
         return;
     }
 
-    ui->serverStatusLabel->setText(tr("等待对方接收... ..."));
+    ui->serverStatusLabel->setText(tr("Waitting for recieving....."));
     emit sendFileName(theFileName);
 }
 
@@ -141,7 +141,7 @@ void TcpServer::initServer()//初始化
     bytesWritten = 0;
     bytesToWrite = 0;
 
-    ui->serverStatusLabel->setText(tr("请选择要传送的文件"));
+    ui->serverStatusLabel->setText(tr("Choose the file to pass"));
     ui->progressBar->reset();
     ui->serverOpenBtn->setEnabled(true);
     ui->serverSendBtn->setEnabled(false);
